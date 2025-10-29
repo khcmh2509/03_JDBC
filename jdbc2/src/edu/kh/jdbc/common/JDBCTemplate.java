@@ -3,6 +3,8 @@ package edu.kh.jdbc.common;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Properties;
 
 /* JDBCTemplate :
@@ -68,11 +70,90 @@ public class JDBCTemplate {
 		
 	}
 	
+	/** 전달 받은 커넥션에서 수행한 SQL을 commit 하는 메서드
+	 * 
+	 */
+	public static void commit(Connection conn) {
+		
+		try {
+			if(conn != null && !conn.isClosed()) conn.commit();
+			
+		} catch (Exception e) {
+			System.out.println("커밋 중 예외 발생");
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
+	/** 전달 받은 커넥션에서 수행한 SQL을 rollback 하는 메서드
+	 * @param conn
+	 */
+	public static void rollback(Connection conn) {
+		
+		try {
+			if(conn != null && !conn.isClosed()) conn.rollback();
+			
+		} catch (Exception e) {
+			System.out.println("롤백 중 예외발생");
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
+	// ------------------------
 	
+	// Connection, Statement(PreparedStatement), ResultSet
+	
+	/** 전달받은 커넥션을 close(자원반환) 하는 메서드
+	 * 
+	 */
+	public static void close(Connection conn) {
+		
+		try {
+			if(conn != null && !conn.isClosed()) conn.close();
+			
+		} catch (Exception e) {
+			System.out.println("커넥션 close() 중 예외 발생");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	/** 전달 받은 Statement or PreparedStatement 둘 다 close() 할 수 있는 메서드
+	 * + 다형성의 업캐스팅 적용
+	 * -> PreparedStatement는 Statement의 자식
+	 */
+	public static void close(Statement stmt) {
+		
+		try {
+			if(stmt != null && !stmt.isClosed()) stmt.close();
+			
+		} catch (Exception e) {
+			System.out.println("Statement close() 중 예외 발생");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	/** 전달 받은 ResultSet을 close() 하는 메서드
+	 * @param rs
+	 */
+	public static void close(ResultSet rs) {
+		
+		try {
+			if(rs != null && !rs.isClosed()) rs.close();
+			
+		} catch (Exception e) {
+			System.out.println("ResultSet close() 중 예외발생");
+			e.printStackTrace();
+		}
+		
+	}
+
 	
 
 }
