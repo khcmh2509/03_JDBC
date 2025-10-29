@@ -11,10 +11,9 @@ public class UserView {
 	// 필드
 	private UserService service = new UserService();
 	private Scanner sc = new Scanner(System.in);
-
-	public void test() {
-		// TODO Auto-generated method stub
+	
+	
+	
 		
-	}
 
 }
