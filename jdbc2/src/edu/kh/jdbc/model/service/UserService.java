@@ -61,6 +61,21 @@ public class UserService {
 		// 4. 결과 반환
 		return userList;
 	}
+
+	/** 3. User 중 이름에 검색어가 포함된 회원 조회 서비스
+	 * @param keyword : 입력받은 키워드
+	 * @return searchList : 조회된 회원 리스트
+	 */
+	public List<User> selectName(String keyword) throws Exception{
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<User> searchList = dao.selectName(conn, keyword);
+		
+		JDBCTemplate.close(conn);
+		
+		return searchList;
+	}
 	
 	
 	

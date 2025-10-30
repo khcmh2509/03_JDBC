@@ -88,18 +88,52 @@ public class UserView {
 		
 	}
 
+	/** 5. USER_NO를 입력받아 일치하는 User 삭제(DELETE)
+	 * * DML 이다!! 
+	 * 
+	 * -- 삭제 성공했을 때 : 삭제 성공
+	 * -- 삭제 실패했을 때 : 사용자 번호가 일치하는 User가 존재하지 않음
+	 * 
+	 */
 	private void deleteUser() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/** 4. USER_NO 를 입력받아 일치하는 User 조회
+	 * * 딱 1행만 조회되거나 or 일치하는 것 못찾았거나
+	 * 
+	 * -- 찾았을 때 : User 객체 출력
+	 * -- 없을 때   : USER_NO가 일치하는 회원 없음
+	 * 
+	 */
 	private void selectUser() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void selectName() {
-		// TODO Auto-generated method stub
+	/** 3. User 중 이름에 검색어가 포함된 회원 조회
+	 * 검색어 입력 : 유
+	 * 
+	 */
+	private void selectName() throws Exception{
+		System.out.println("\n===3. User 중 이름에 검색어가 포함된 회원 조회===\n");
+		
+		System.out.print("검색어 입력 : ");
+		String keyword = sc.next();
+		
+		// 서비스 호출 후 결과 반환받기
+		List<User> searchList = service.selectName(keyword);
+		
+		if(searchList.isEmpty()) {
+			System.out.println("검색 결과 없음");
+			return;
+		}
+		
+		for(User user : searchList) {
+			System.out.println(user);
+		}
+		
 		
 	}
 

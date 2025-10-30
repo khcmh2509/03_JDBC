@@ -123,6 +123,55 @@ public class UserDAO {
 		// 조회 결과가 담긴 List 반환
 		return userList;
 	}
+
+	/** 3. User 중 이름에 검색어가 포함된 회원 조회용 DAO
+	 * @param conn
+	 * @param keyword
+	 * @return searchList
+	 */
+	public List<User> selectName(Connection conn, String keyword) 
+													throws Exception{
+		
+		// 결과 저장용 변수 선언
+		List<User> searchList = new ArrayList<User>();
+		
+		try {
+			
+			String sql = """
+				SELECT USER_NO, USER_ID, USER_PW, USER_NAME, 
+				TO_CHAR(ENROLL_DATE, 'YYYY"년" MM"월" DD"일"') ENROLL_DATE
+				FROM TB_USER
+				WHERE USER_NAME LIKE '%' || ? || '%'
+				ORDER BY USER_NO
+				""";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			// ? 에 알맞은 값 세팅
+			pstmt.setString(1, keyword);
+			
+			// DB 수행 후 결과 반환 받기
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				int userNo = rs.getInt("USER_NO");
+				String userId = rs.getString("USER_ID");
+				String userPw = rs.getString("USER_PW");
+				String userName = rs.getString("USER_NAME");
+				String enrollDate = rs.getString("ENROLL_DATE");
+				
+				User user = new User(userNo, userId, userPw, userName, enrollDate);
+				
+				searchList.add(user);
+			}
+			
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		
+		return searchList;
+	}
 	
 	
 	
