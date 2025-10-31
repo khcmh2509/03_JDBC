@@ -1,5 +1,6 @@
 package edu.kh.jdbc.view;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -73,13 +74,127 @@ public class UserView {
 		
 	}
 
-	private void multiInsertUser() {
-		// TODO Auto-generated method stub
+	/** 8. 여러 User 등록하기
+	 * 
+	 */
+	private void multiInsertUser() throws Exception{
+		
+		System.out.println("\n===8. 여러 User 등록===\n");
+		
+		System.out.print("등록할 User 수 : ");
+		int input = sc.nextInt();
+		sc.nextLine(); // 버퍼 개행문자 제거
+		
+		// 입력받은 회원 정보를 저장할 List 객체 생성
+		List<User> userList = new ArrayList<User>();
+		
+		for(int i = 0; i < input; i++) {
+			
+			String userId = null; // 입력된 아이디를 저장할 변수
+			
+			while(true) {
+				
+				System.out.print((i+1) + "번째 ID : ");
+				userId = sc.next();
+				
+				// 입력받은 userId가 중복인지 검사하는
+				// 서비스(SELECT) 호출 후 결과(int, 중복 == 1, 아니면 == 0) 반환 받기
+				int count = service.idCheck(userId);
+				
+				if(count == 0) { // 중복이 아닌 경우 
+					System.out.println("사용 가능한 아이디입니다");
+					break;
+				}
+				
+				System.out.println("이미 사용중인 아이디 입니다. 다시 입력하세요.");
+			
+			}
+			
+			// pw, name 입력 받기
+			System.out.print((i+1) + "번째 PW : ");
+			String userPw = sc.next();
+			
+			System.out.print((i+1) + "번째 Name : ");
+			String userName = sc.next();
+			
+			// 입력받은 값 3개를 한번에 묶어서 전달할 수 있도록
+			// User DTO 객체를 생성한 후 필드에 값 세팅 
+			User user = new User();
+			
+			user.setUserId(userId);
+			user.setUserPw(userPw);
+			user.setUserName(userName);
+			
+			// userList에 user 추가 
+			userList.add(user);
+			
+		} // for문 종료
+		
+		// 입력받은 모든 사용자를 insert 하는 서비스 호출
+		// -> 결과로 삽입된 행의 개수 반환
+		int result = service.multiInsertUser(userList);
+		
+		if(result == userList.size()) {
+			System.out.println("전체 삽입 성공!!!");
+			
+		} else {
+			System.out.println("삽입 실패");
+			
+		}
 		
 	}
 
-	private void insertUser2() {
-		// TODO Auto-generated method stub
+	/** 7. User 등록(아이디 중복 검사)
+	 * 
+	 */
+	private void insertUser2() throws Exception{
+		
+		System.out.println("\n===7. User 등록(아이디 중복 검사)===\n");
+		
+		String userId = null; // 입력된 아이디를 저장할 변수
+		
+		while(true) {
+			
+			System.out.print("ID : ");
+			userId = sc.next();
+			
+			// 입력받은 userId가 중복인지 검사하는
+			// 서비스(SELECT) 호출 후 결과(int, 중복 == 1, 아니면 == 0) 반환 받기
+			int count = service.idCheck(userId);
+			
+			if(count == 0) { // 중복이 아닌 경우 
+				System.out.println("사용 가능한 아이디입니다");
+				break;
+			}
+			
+			System.out.println("이미 사용중인 아이디 입니다. 다시 입력하세요.");
+		
+		}
+		
+		// pw, name 입력 받기
+		System.out.print("PW : ");
+		String userPw = sc.next();
+		
+		System.out.print("Name : ");
+		String userName = sc.next();
+		
+		// 입력받은 값 3개를 한번에 묶어서 전달할 수 있도록
+		// User DTO 객체를 생성한 후 필드에 값 세팅 
+		User user = new User();
+		
+		user.setUserId(userId);
+		user.setUserPw(userPw);
+		user.setUserName(userName);
+		
+		// 서비스 호출 후 결과 반환 받기
+		int result = service.insertUser(user);
+		
+		if(result > 0) {
+			System.out.println("\n" + userId + " 사용자가 등록되었습니다.\n");
+			
+		} else {
+			System.out.println("\n**등록 실패**\n");
+		}
 		
 	}
 
