@@ -76,6 +76,77 @@ public class UserService {
 		
 		return searchList;
 	}
+
+	/** 4. USER_NO를 입력받아 일치하는 USER 조회 서비스
+	 * @param input
+	 * @return
+	 */
+	public User selectUser(int input) throws Exception{
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		User user = dao.selectUser(conn, input);
+		
+		JDBCTemplate.close(conn);
+		
+		return user;
+	}
+
+	/** 5. USER_NO를 입력받아 일치하는 User 삭제 서비스
+	 * @param input
+	 * @return
+	 */
+	public int deleteUser(int input) throws Exception {
+
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.deleteUser(conn, input);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	/** 6-1. ID, PW가 일치하는 회원이 있는지 조회(SELECT)
+	 * @param userId
+	 * @param userPw
+	 * @return
+	 */
+	public int selectUserNo(String userId, String userPw) throws Exception{
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int userNo = dao.selectUser(conn, userId, userPw);
+		
+		JDBCTemplate.close(conn);
+		
+		return userNo;
+	}
+
+	/** 6-2. USER_NO가 일치하는 회원의 이름 수정 서비스(UPDATE)
+	 * @param name
+	 * @param userNo
+	 * @return
+	 */
+	public int updateName(String name, int userNo) throws Exception{
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.updateName(conn, name, userNo);
+		
+		if(result > 0) JDBCTemplate.commit(conn);
+		else		   JDBCTemplate.rollback(conn);
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
 	
 	
 	

@@ -83,8 +83,40 @@ public class UserView {
 		
 	}
 
-	private void updateName() {
-		// TODO Auto-generated method stub
+	/** 6. ID, PW가 일치하는 회원이 있을(SELECT) 경우 이름 수정(UPDATE)
+	 * 
+	 */
+	private void updateName() throws Exception{
+		
+		System.out.println("\n===6. ID, PW가 일치하는 회원의 이름 수정===\n");
+		
+		System.out.print("ID : ");
+		String userId = sc.next();
+		
+		System.out.print("PW : ");
+		String userPw = sc.next();
+		
+		// 입력받은 ID, PW 가 일치하는 회원이 존재하는지 조회(SELECT)
+		// -> 수정할 때 필요한 데이터 USER_NO 조회해오기.
+		int userNo = service.selectUserNo(userId, userPw);
+		
+		// 조회 결과 없을 때
+		if(userNo == 0) {
+			System.out.println("아이디, 비밀번호가 일치하는 사용자가 없음");
+			return;
+		}
+		
+		// 조회 결과 있을 때
+		System.out.print("수정할 이름 입력 : ");
+		String name = sc.next();
+		
+		// 위에서 조회된 회원(userNo)의 이름을 수정
+		// 서비스 호출(UPDATE) 후 결과 반환(int) 받기
+		int result = service.updateName(name, userNo);
+		
+		if(result > 0) System.out.println("수정 성공!!!");
+		else		   System.out.println("수정 실패...");
+		
 		
 	}
 
@@ -95,8 +127,16 @@ public class UserView {
 	 * -- 삭제 실패했을 때 : 사용자 번호가 일치하는 User가 존재하지 않음
 	 * 
 	 */
-	private void deleteUser() {
-		// TODO Auto-generated method stub
+	private void deleteUser() throws Exception{
+		System.out.println("\n===5. USER_NO를 입력받아 일치하는 User 삭제===\n");
+		
+		System.out.print("삭제할 사용자 번호 입력 : ");
+		int input = sc.nextInt();
+		
+		int result = service.deleteUser(input);
+		
+		if(result > 0) System.out.println("삭제 성공");
+		else 		   System.out.println("사용자 번호가 일치하는 User 가 존재하지 않음");
 		
 	}
 
@@ -107,8 +147,26 @@ public class UserView {
 	 * -- 없을 때   : USER_NO가 일치하는 회원 없음
 	 * 
 	 */
-	private void selectUser() {
-		// TODO Auto-generated method stub
+	private void selectUser() throws Exception{
+		
+		System.out.println("\n===4. USER_NO 를 입력받아 일치하는 User 조회===\n");
+		
+		System.out.print("사용자 번호 입력 : ");
+		int input = sc.nextInt();
+		
+		// service 호출 후 결과 반환받기
+		// USER_NO (PK) == 중복이 있을 수 없다!
+		// == 일치하는 사용자가 있다면 딱 1행만 조회된다
+		// -> 1행의 조회 결과를 담기 위해서 User DTO 객체 1개 사용
+		User user = service.selectUser(input);
+		
+		// 조회 결과가 없으면 null , 있으면 null 이 아님
+		if(user == null) {
+			System.out.println("USER_NO가 일치하는 회원 없음");
+			return;
+		}
+		
+		System.out.println(user);
 		
 	}
 
